@@ -3,7 +3,29 @@ import numpy as np
 import tkinter as tk
 from tkinter import filedialog, colorchooser, messagebox
 from PIL import Image, ImageTk
+import sys
+import json
 
+
+def hex_to_bgr(hex_color):
+    hex_color = hex_color.lstrip('#')
+    rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    return (rgb[2], rgb[1], rgb[0])
+
+
+def replace_green(img, hex_color):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([35, 50, 50])
+    upper_green = np.array([85, 255, 255])
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+    kernel = np.ones((3, 3), np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask = cv2.GaussianBlur(mask, (5, 5), 0)
+    new_bgr = np.uint8([[hex_to_bgr(hex_color)]])
+    new_hsv = cv2.cvtColor(new_bgr, cv2.COLOR_BGR2HSV)[0][0]
+    hsv[:, :, 0][mask > 0] = new_hsv[0]
+    hsv[:, :, 1][mask > 0] = new_hsv[1]
+    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
 class GreenScreenReplacer:
     def __init__(self, root):
@@ -103,7 +125,20 @@ class GreenScreenReplacer:
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.geometry("800x700")
-    app = GreenScreenReplacer(root)
-    root.mainloop()
+    if (len(sys.argv)==3):
+        ppath=sys.argv[1]
+        jjson=sys.argv[2]
+        img=cv2.imread(ppath) 
+        with open(jjson,"r") as f:
+            colors = json.load(f)
+        for entry in colors:
+            name = entry["name"]
+            result = replace_green(img, entry["hex"])
+            filename = name.replace(" ", "_") + ".png"
+            cv2.imwrite(filename, result)
+            print(f"Saved {filename}")
+    else:
+        root = tk.Tk()
+        root.geometry("800x700")
+        app = GreenScreenReplacer(root)
+        root.mainloop()
