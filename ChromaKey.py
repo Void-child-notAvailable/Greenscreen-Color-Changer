@@ -27,6 +27,8 @@ def replace_green(img, hex_color):
     hsv[:, :, 1][mask > 0] = new_hsv[1]
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
+
+
 class GreenScreenReplacer:
     def __init__(self, root):
         self.root = root
@@ -73,11 +75,6 @@ class GreenScreenReplacer:
             self.hex_entry.insert(0, color)
         self.process_image()
 
-    def hex_to_bgr(self, hex_color):
-        hex_color = hex_color.lstrip('#')
-        rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
-        return (rgb[2], rgb[1], rgb[0])
-
     def process_image(self):
         if not self.image_path:
             messagebox.showerror("Error", "Select an image first")
@@ -87,23 +84,7 @@ class GreenScreenReplacer:
 
         try:
             img = cv2.imread(self.image_path)
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-            #green mask
-            lower_green = np.array([35, 50, 50])
-            upper_green = np.array([85, 255, 255])
-
-            mask = cv2.inRange(hsv, lower_green, upper_green)
-            kernel = np.ones((3, 3), np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-            mask = cv2.GaussianBlur(mask, (5, 5), 0)
-            new_bgr = np.uint8([[self.hex_to_bgr(hex_color)]])
-            new_hsv = cv2.cvtColor(new_bgr, cv2.COLOR_BGR2HSV)[0][0]
-
-            #hue / saturation
-            hsv[:, :, 0][mask > 0] = new_hsv[0]
-            hsv[:, :, 1][mask > 0] = new_hsv[1]
-            self.output_image = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+            self.output_image = replace_green(img,hex_color)
 
             preview_img = cv2.cvtColor(self.output_image, cv2.COLOR_BGR2RGB)
             preview_img = Image.fromarray(preview_img)
