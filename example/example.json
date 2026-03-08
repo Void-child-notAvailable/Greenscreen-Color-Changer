@@ -1,0 +1,66 @@
+[
+    {
+        "name": "AZALEA",
+        "hex": "#d977a9"
+    },
+    {
+        "name": "BLACK",
+        "hex": "#25282a"
+    },
+    {
+        "name": "CAROLINE BLUE",
+        "hex": "#7ba4db"
+    },
+    {
+        "name": "CHARDINAL RED",
+        "hex": "#8d2838"
+    },
+    {
+        "name": "CHERRY RED",
+        "hex": "#ac2b37"
+    },
+    {
+        "name": "DAISY",
+        "hex": "#fed141"
+    },
+    {
+        "name": "FOREST GREEN",
+        "hex": "#273b33"
+    },
+    {
+        "name": "HELICONA",
+        "hex": "#db3e79"
+    },
+    {
+        "name": "IRIS",
+        "hex": "#3975b7"
+    },
+    {
+        "name": "JADE",
+        "hex": "#008e85"
+    },
+    {
+        "name": "LIGHT BLUE",
+        "hex": "#a3b3cb"
+    },
+    {
+        "name": "MAROON",
+        "hex": "#5b2b42"
+    },
+    {
+        "name": "PURPLE",
+        "hex": "#553575"
+    },
+    {
+        "name": "ROYAL",
+        "hex": "#264583"
+    },
+    {
+        "name": "SAPPHIRE",
+        "hex": "#00679c"
+    },
+    {
+        "name": "WHITE",
+        "hex": "#ffffff"
+    } 
+]
